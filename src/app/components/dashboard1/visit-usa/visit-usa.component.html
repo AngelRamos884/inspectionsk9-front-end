@@ -1,0 +1,60 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <mat-card-title>Visit From USA</mat-card-title>
+    <mat-card-subtitle class="mat-body-1">Top locations</mat-card-subtitle>
+
+    <div style="height: 239px" class="overflow-hidden m-b-15 m-t-15">
+      <dx-vector-map
+        id="vector-map"
+        [bounds]="[-500, 50, 180, -60]"
+        (onClick)="markerClick($event)"
+      >
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        <dxi-layer
+          [dataSource]="world"
+          name="continents"
+          [hoverEnabled]="false"
+        ></dxi-layer>
+        <dxi-layer [dataSource]="markers"></dxi-layer>
+      </dx-vector-map>
+
+      <dx-button id="reset" text="Reset" (onClick)="resetClick()"></dx-button>
+    </div>
+  </mat-card-content>
+  <mat-card-content class="p-24 p-t-16">
+    <div class="d-flex align-items-center justify-content-between gap-16">
+      <span class="f-w-600 f-s-14">LA</span>
+      <mat-progress-bar mode="determinate" value="28"></mat-progress-bar>
+      <span class="f-w-600 f-s-14">28%</span>
+    </div>
+    <div
+      class="d-flex align-items-center justify-content-between gap-16 m-t-20"
+    >
+      <span class="f-w-600 f-s-14">NY</span>
+      <mat-progress-bar
+        mode="determinate"
+        color="accent"
+        value="21"
+      ></mat-progress-bar>
+      <span class="f-w-600 f-s-14">21%</span>
+    </div>
+    <div
+      class="d-flex align-items-center justify-content-between gap-16 m-t-20"
+    >
+      <span class="f-w-600 f-s-14">AT</span>
+      <mat-progress-bar
+        mode="determinate"
+        color="warn"
+        value="18"
+      ></mat-progress-bar>
+      <span class="f-w-600 f-s-14">18%</span>
+    </div>
+    <div
+      class="d-flex align-items-center justify-content-between gap-16 m-t-20"
+    >
+      <span class="f-w-600 f-s-14">CA</span>
+      <mat-progress-bar mode="determinate" value="12"></mat-progress-bar>
+      <span class="f-w-600 f-s-14">12%</span>
+    </div>
+  </mat-card-content>
+</mat-card>

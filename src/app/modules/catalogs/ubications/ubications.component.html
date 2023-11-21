@@ -1,0 +1,107 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="row justify-content-between m-b-8">
+            <div class="col-sm-4 col-lg-4">
+                <mat-card-title>Lista de ubicaciones</mat-card-title>
+                <mat-card-subtitle class="mat-body-1">Busca tus datos</mat-card-subtitle>
+                <div class="row">
+                    <div class="col-sm-6 m-t-15">
+                      <button
+                        mat-flat-button
+                        color="primary"
+                        (click)="openDialog('0ms', '0ms')"
+                        class="w-100"
+                      >
+                        Agregar
+                      </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-lg-3">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" placeholder="Search here"
+                        #input />
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="table-responsive m-t-30">
+            <mat-table  #table [dataSource]="dataSource">
+                <!-- Position Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef >
+                        Nombre
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="p-l-0">
+                        <div class="d-flex align-items-center">
+                            <div class="m-l-16">
+                                <h6 class="mat-subtitle-1 f-s-14 f-w-600">
+                                    {{ element.name }}
+                                </h6>
+                            </div>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="code">
+                    <mat-header-cell  *matHeaderCellDef >
+                        Codigo
+                    </mat-header-cell >
+                    <mat-cell *matCellDef="let element" class="mat-body-1">
+                        {{ element.code }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell  *matHeaderCellDef >
+                        Descripccion
+                    </mat-header-cell >
+                    <mat-cell *matCellDef="let element"  class="mat-body-1">
+                        {{ element.description }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="isActive">
+                    <mat-header-cell *matHeaderCellDef > Esta Activo? </mat-header-cell >
+                    <mat-cell *matCellDef="let element">
+                        <ng-template [ngIf]="element?.isActive">
+                            <span class="bg-light-primary text-primary border-primary rounded f-w-600 p-6 p-y-4 f-s-12">
+                                    Activo
+                            </span>
+                       </ng-template>
+                       <ng-template [ngIf]="!element?.isActive">
+                            <span class="bg-light-error text-error border-error rounded f-w-600 p-6 p-y-4 f-s-12">
+                                No Activo
+                            </span>
+                       </ng-template>
+                       
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14"> Action </mat-header-cell >
+                    <mat-cell  *matCellDef="let element" class="action-link"> 
+                        <button
+                                mat-flat-button
+                                (click)="openDialog('0ms', '0ms', element)"
+                                color="warn" >
+                                    Editar
+                         </button>
+                    </mat-cell >
+                </ng-container>
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="3">
+                        No data matching the filter "{{ input.value }}"
+                    </td>
+                </tr>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+            </mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>
