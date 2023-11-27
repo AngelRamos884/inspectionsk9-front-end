@@ -1,9 +1,9 @@
-<h5 mat-dialog-title class="mat-subtitle-1">Guardar Ubicacion</h5>
+<h5 mat-dialog-title class="mat-subtitle-1">Guardar Vehiculo</h5>
 <div mat-dialog-actions class=" p-t-0">
   <form [formGroup]="form" (ngSubmit)="submit()" style="width: auto;" class="col-12">
     <div class="row" NgIf="customers$ | async">
 
-      <div class="col-md-8">
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
@@ -12,8 +12,8 @@
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-select value="" formControlName="customerId">
-                  <mat-option value="">Seleccionar cliente</mat-option>
+                <mat-select value="0" formControlName="customerId">
+                  <mat-option value="0">Seleccionar cliente</mat-option>
                   <mat-option *ngFor="let item of customers$ | async" [value]="item?.id">{{item?.name |
                     uppercase}}</mat-option>
                 </mat-select>
@@ -23,55 +23,55 @@
     
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
-              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">#Empleado</mat-label>
+              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"># Vehiculo</mat-label>
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <input matInput formControlName="employeeCode" placeholder="Escribe..." />
+                <input matInput formControlName="code" placeholder="Escribe..." />
               </mat-form-field>
             </div>
           </div>
     
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
-              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nombres</mat-label>
+              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Placas</mat-label>
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <input matInput formControlName="firstName" placeholder="Escribe..." />
+                <input matInput formControlName="plates1" placeholder="Escribe..." />
               </mat-form-field>
             </div>
           </div>
     
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
-              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Apellidos</mat-label>
+              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Marca</mat-label>
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <input matInput formControlName="lastName" placeholder="Escribe..." />
+                <input matInput formControlName="brand" placeholder="Escribe..." />
               </mat-form-field>
             </div>
           </div>
     
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
-              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Licencia</mat-label>
+              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Tipo</mat-label>
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <input matInput formControlName="license" placeholder="Escribe..." />
+                <input matInput formControlName="type" placeholder="Escribe..." />
               </mat-form-field>
             </div>
           </div>
     
           <div class="col-md-6">
             <div class="col-sm-12 d-flex align-items-center">
-              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Numero de telefono</mat-label>
+              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">VIN</mat-label>
             </div>
             <div class="col-sm-12">
               <mat-form-field appearance="outline" class="w-100">
-                <input matInput formControlName="phoneNumber" placeholder="Escribe..." />
+                <input matInput formControlName="vin" placeholder="Escribe..." />
               </mat-form-field>
             </div>
           </div>
@@ -89,20 +89,6 @@
             <mat-checkbox color="primary" formControlName="isActive" class="m-b-20 m-l-10">Esta Activo?</mat-checkbox>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="col-md-12 m-b-10">
-          <div class="col-sm-12 d-flex align-items-center">
-            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Agregar foto</mat-label>
-          </div>
-          <div class="col-sm-12">
-            <input (change)="onFileSelected($event)" #fileInput type="file" id="file">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <img layout-fill src="{{ urlPhoto  }}" *ngIf="urlPhoto" style="height: 20rem; width: 60%;" alt="user" class="rounded m-t-8 m-b-10" />
-        </div>      
       </div>
 
       <div class="col-md-12 m-t-5">

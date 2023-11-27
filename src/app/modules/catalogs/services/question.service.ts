@@ -4,17 +4,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
-export class DriverService {
-    private controllerPath = 'driver'
+export class QuestionService {
+    private controllerPath = 'question'
     constructor(
         private httpClient:HttpClient
     ){
 
     }
-    getDriversByCustomerId(data:any){
-        return this.httpClient.post(`${this.controllerPath}/getDriversByCustomerId`, data);
-    }
-
     save(data:any){
         const { id } = data;
         if(Number(id) > 0){

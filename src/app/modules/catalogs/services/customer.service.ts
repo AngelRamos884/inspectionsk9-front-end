@@ -13,6 +13,10 @@ export class CustomersService {
 
     }
 
+    getCustomersActive():Observable<any>{
+        return this.httpClient.get(`${this.controllerPath}/getCustomersActive`);
+    }
+
     saveCustomer(data:any){
         const { id } = data;
         if(Number(id) > 0){

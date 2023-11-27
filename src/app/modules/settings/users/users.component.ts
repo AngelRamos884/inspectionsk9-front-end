@@ -3,64 +3,51 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MaterialModule } from '../../../../app/material.module';
-import { DriverService } from '../services/driver.service';
+// import { TruckService } from '../services/user.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
-import { CustomersService } from '../services/customer.service';
-import { FileService } from '../services/file.service';
+import { UserService } from '../services/user.service';
+import { CustomersService } from '@modules/catalogs/services/customer.service';
+import { ERoleType } from 'src/app/enums/role-type.interface';
+import Swal from 'sweetalert2';
+// import { CustomersService } from '../services/customer.service';
+// import { FileService } from '../services/file.service';
 
 @Component({
-    selector: 'save-driver',
-    templateUrl: 'save-driver.component.html',
+    selector: 'save-user',
+    templateUrl: 'save-user.component.html',
     standalone: true,
     imports: [MaterialModule, CommonModule, FormsModule, ReactiveFormsModule],
 })
-export class AppSaveDriverComponent {
+export class AppSaveUserComponent {
 
-    urlPhoto: any = null;
-    file: File;
-    photoDriver: any = null;
+    hide = true;
     customers$: Observable<any[]>;
+    roles$: Observable<any[]>;
     onSave = new EventEmitter<any>();
     constructor(
+        private userService:UserService,
         private customerService: CustomersService,
-        public dialogRef: MatDialogRef<AppSaveDriverComponent>,
+        public dialogRef: MatDialogRef<AppSaveUserComponent>,
         @Optional() @Inject(MAT_DIALOG_DATA) public data: any
     ) {
+        this.roles$ = this.userService.getRolesActive();
         this.getCustomersAvailable();
         if (data != null) {
-            const { customer, urlPhoto, ...d } = data;
-
-            if (urlPhoto != "") {
-                const token = localStorage.getItem('token');
-                this.urlPhoto = `https://inspection.solutionsitar.com/api/uploads/${urlPhoto}?token=${token}`
-            }
-
-            this.form.patchValue({ ...d, customerId: customer.id });
+            const { roles, customer, ...d } = data;
+            this.form.controls['password'].clearValidators();
+            this.form.patchValue({ ...d, roleId:roles[0].id, customerId:customer?.id });
+            this.onChangeCustomerValidation();
         }
     }
 
-    onFileSelected(event: any) {
-        const files = event.target.files;
-        if (files.length === 0)
-            return;
-
-        const mimeType = files[0].type;
-        if (mimeType.match(/image\/*/) == null) {
-            // this.message = "Only images are supported.";
-            alert("Only images are supported.")
-            return;
-        }
-
-        const reader = new FileReader();
-        this.file = files;
-        reader.readAsDataURL(files[0]);
-        reader.onload = (_event) => {
-            // debugger
-            this.urlPhoto = reader.result;
-            // console.log( reader.result)
+    onChangeCustomerValidation(){
+        if(Number(this.f.roleId.value) == ERoleType.CUSTOMER){
+            this.form.controls['customerId'].addValidators(Validators.required);               
+        }else{
+            this.form.controls['customerId'].clearValidators();
         }
     }
 
@@ -72,13 +59,12 @@ export class AppSaveDriverComponent {
 
     form = new FormGroup({
         id: new FormControl(0),
-        customerId: new FormControl('', [Validators.required]),
-        employeeCode: new FormControl('', [Validators.required]),
         firstName: new FormControl('', [Validators.required]),
         lastName: new FormControl('', [Validators.required]),
-        license: new FormControl('', [Validators.required]),
-        phoneNumber: new FormControl('', [Validators.required]),
-        description: new FormControl('', [Validators.required]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        roleId: new FormControl('', [Validators.required]),
+        password: new FormControl('', [Validators.required]),
+        customerId: new FormControl(''),
         isActive: new FormControl(false)
     });
 
@@ -87,11 +73,14 @@ export class AppSaveDriverComponent {
     }
 
     submit() {
-
+        let customer: any = null;
         if (this.form.valid) {
+            if (Number(this.f.roleId.value) != ERoleType.GENERAL) {
+                customer = { id: this.f.customerId.value };
+            };
             this.onSave.emit({
                 status: 'OK',
-                data: { ...this.form.getRawValue(), file: this.file },
+                data: { ...this.form.getRawValue(), roles: [{ id: this.f.roleId.value }], customer }
             });
             this.dialogRef.close();
         }
@@ -99,27 +88,28 @@ export class AppSaveDriverComponent {
 }
 
 @Component({
-    selector: 'app-drivers',
-    templateUrl: './drivers.component.html',
+    selector: 'app-users',
+    templateUrl: './users.component.html',
     standalone: true,
     imports: [MaterialModule, CommonModule],
 })
-export class DriversComponent implements OnInit {
+export class UsersComponent implements OnInit {
 
+    users$:Observable<any>;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
         Object.create(null);
 
-    displayedColumns: string[] = ['company', 'names', 'employeeCode', 'isActive', 'action'];
+    displayedColumns: string[] = ['email', 'names', 'roles', 'isActive', 'action'];
+
     dataSource = new MatTableDataSource();
 
     constructor(
-        private fileService: FileService,
+        private userService:UserService,
         public dialog: MatDialog,
-        private driverService: DriverService
     ) { }
 
     ngOnInit(): void {
-        this.getAllDrivers();
+        this.getAllUsers();
     }
 
     openDialog(
@@ -127,37 +117,23 @@ export class DriversComponent implements OnInit {
         exitAnimationDuration: string,
         data: any = null
     ) {
-        let dialogSave = this.dialog.open(AppSaveDriverComponent, {
+        let dialogSave = this.dialog.open(AppSaveUserComponent, {
             width: '500vh',
             enterAnimationDuration,
             exitAnimationDuration,
             disableClose: true,
             data,
-            height: '80vh'
+            height: '50vh'
         });
 
         dialogSave.componentInstance.onSave.subscribe((d: any) => {
-
+            debugger
             const { status, data } = d;
-
             if (status == "OK") {
-                this.driverService
+                this.userService
                     .save(data)
                     .subscribe((res: any) => {
-                        const { id, customerId } = res;
-
-                        debugger
-                        //TODO -> Upload File
-                        if (!data?.file) {
-                            this.getAllDrivers();
-                            return;
-                        }
-                        this.fileService
-                            .uploadFile({ file: data?.file[0], driverId: id, customerId })
-                            .subscribe((res: any) => {
-                                this.getAllDrivers();
-                            });
-
+                        this.getAllUsers();
                     });
             }
 
@@ -168,8 +144,8 @@ export class DriversComponent implements OnInit {
 
     }
 
-    getAllDrivers() {
-        this.driverService
+    getAllUsers() {
+        this.userService
             .getAll()
             .subscribe((res: any) => {
                 this.dataSource = new MatTableDataSource(res);

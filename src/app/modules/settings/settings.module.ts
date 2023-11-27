@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CatalogsRoutes } from './catalogs.routing';
+import { SettingsRoutes } from './settings.routing';
 
 @NgModule({
   imports: [
-    RouterModule.forChild(CatalogsRoutes),
+    RouterModule.forChild(SettingsRoutes),
   ],
 })
-export class CatalogsModule {}
+export class SettingsModule {}

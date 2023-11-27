@@ -19,12 +19,12 @@
     <!-- --------------------------------------------------------------- -->
     <!--  Search -->
     <!-- --------------------------------------------------------------- -->
-    <button mat-stroked-button class="d-none d-lg-flex" (click)="openDialog()">
+    <!-- <button mat-stroked-button class="d-none d-lg-flex" (click)="openDialog()">
       <div class="d-flex align-items-center">
         <i-tabler name="search" class="icon-20 d-flex m-r-10"></i-tabler> Try to
         Searching...
       </div>
-    </button>
+    </button> -->
 
     <!-- --------------------------------------------------------------- -->
     <!-- langugage Dropdown -->
@@ -54,7 +54,7 @@
     <!-- --------------------------------------------------------------- -->
     <!-- Messages Dropdown -->
     <!-- --------------------------------------------------------------- -->
-    <button mat-icon-button [matMenuTriggerFor]="msgMenu" aria-label="Messages">
+    <!-- <button mat-icon-button [matMenuTriggerFor]="msgMenu" aria-label="Messages">
       <i-tabler class="d-flex" name="message-2"></i-tabler>
       <div class="pulse">
         <span class="heartbit border-primary"></span>
@@ -94,12 +94,12 @@
           See All Messages
         </button>
       </div>
-    </mat-menu>
+    </mat-menu> -->
 
     <!-- --------------------------------------------------------------- -->
     <!-- Notification Dropdown -->
     <!-- --------------------------------------------------------------- -->
-    <button
+    <!-- <button
       mat-icon-button
       [matMenuTriggerFor]="notificationMenu"
       aria-label="Notifications"
@@ -143,7 +143,7 @@
           See All Notifications
         </button>
       </div>
-    </mat-menu>
+    </mat-menu> -->
 
     <!-- --------------------------------------------------------------- -->
     <!-- profile Dropdown -->
@@ -165,7 +165,7 @@
 
         <div class="m-l-16 text-left d-none d-lg-flex">
           <div>
-            <h5 class="f-s-16">Mike Nielsen</h5>
+            <h5 class="f-s-16">{{userInfo.displayName}}</h5>
             <span class="f-s-14 mat-body-1">Admin</span>
           </div>
         </div>
@@ -176,7 +176,7 @@
       xPosition="before"
       class="topbar-dd cardWithShadow"
     >
-      <ng-scrollbar class="position-relative" style="height: 490px">
+      <ng-scrollbar class="position-relative" style="height: 245px">
         <div class="p-x-32 p-y-16">
           <h6 class="f-s-16 f-w-600 m-0">User Profile</h6>
 
@@ -187,16 +187,16 @@
               width="95"
             />
             <div class="m-l-16">
-              <h6 class="f-s-16 f-w-600 m-0">Mike Nielsen</h6>
+              <h6 class="f-s-16 f-w-600 m-0">{{userInfo.displayName}}</h6>
               <span class="f-s-14 mat-body-1 d-block m-b-4">Admin</span>
               <span class="d-flex align-items-center">
                 <i-tabler name="mail" class="icon-15 m-r-4"></i-tabler>
-                info@spike.com
+                {{userInfo.email}}
               </span>
             </div>
           </div>
         </div>
-        <div class="p-x-32">
+        <!-- <div class="p-x-32">
           <a
             class="p-y-16 text-decoration-none d-block text-hover-primary"
             [routerLink]="[profile.link]"
@@ -221,11 +221,11 @@
               </div>
             </div>
           </a>
-        </div>
+        </div> -->
 
         <div class="p-y-12 p-x-32">
           <button
-            [routerLink]="['/authentication/side-login']"
+            (click)="logOut()"
             mat-flat-button
             color="primary"
             class="w-100"

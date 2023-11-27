@@ -12,6 +12,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { navItems } from '../sidebar/sidebar-data';
+import { AuthService } from '@modules/auth/services/auth.service';
 
 interface notifications {
   id: number;
@@ -47,6 +48,8 @@ interface profiledd {
   templateUrl: './header.component.html',
 })
 export class AppHorizontalHeaderComponent {
+  
+  userInfo:any = {};
   searchText: string = '';
 
   @Input() showToggle = true;
@@ -91,11 +94,24 @@ export class AppHorizontalHeaderComponent {
   ];
 
   constructor(
+    private authService:AuthService,
     private vsidenav: CoreService,
     public dialog: MatDialog,
     private translate: TranslateService
   ) {
+    this.getPropertiesUserLogged();
     // translate.setDefaultLang('en');
+  }
+
+  getPropertiesUserLogged(){
+
+    this.userInfo.displayName = localStorage.getItem('displayName');
+    this.userInfo.email = localStorage.getItem('email');
+
+  }
+
+  logOut(){
+      this.authService.logOut();
   }
 
   changeLanguage(lang: any): void {

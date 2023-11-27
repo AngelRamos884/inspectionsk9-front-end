@@ -28,10 +28,10 @@ export const navItems: NavItem[] = [
       {
         displayName: 'Vehiculos',
         iconName: 'point',
-        route: 'catalogs/vehiculs',
+        route: 'catalogs/trucks',
       },
       {
-        displayName: 'preguntas',
+        displayName: 'Preguntas',
         iconName: 'point',
         route: 'catalogs/questions',
       },

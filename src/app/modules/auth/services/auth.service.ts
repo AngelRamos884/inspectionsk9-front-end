@@ -20,10 +20,19 @@ export class AuthService {
     this.readToken();
   }
 
-  isAuthenticated$():Observable<boolean>{
-    debugger
+  logOut() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('ubicationSelected');
+    this.router.navigate(['/authentication/login'])
+  }
+
+  isAuthenticated$(): Observable<boolean> {
+    if(!this.token){
+      return this.isLoggedIn;
+    }
+
     if (this.token.length < 2) {
-      this.isLoggedIn.next(false);
+      // this.isLoggedIn.next(false);
       return this.isLoggedIn;
     }
     const expired = Number(localStorage.getItem('expired'));
@@ -50,12 +59,12 @@ export class AuthService {
       .pipe(
         map((resp: any) => {
           debugger
-          const { token, ...data} = resp?.user;
-          // this.timeExp = String(exp);
+          const { token, exp, email, displayName, ...data } = resp?.user;
+          this.timeExp = String(exp);
           // console.log(resp)
           // localStorage.setItem('token', token);
-          // localStorage.setItem('displayName', displayName);
-          // localStorage.setItem('email', email);
+          localStorage.setItem('displayName', displayName);
+          localStorage.setItem('email', email);
           // localStorage.setItem('roles', roles);
           // localStorage.setItem('casetas',  JSON.stringify(resp?.casetas))
           this.router.navigate(['/dashboards/dashboard1']);
@@ -150,6 +159,4 @@ export class AuthService {
     }
 
   }
-
-
 }

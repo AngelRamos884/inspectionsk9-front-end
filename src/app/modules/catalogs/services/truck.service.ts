@@ -4,15 +4,15 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
-export class DriverService {
-    private controllerPath = 'driver'
+export class TruckService {
+    private controllerPath = 'truck'
     constructor(
         private httpClient:HttpClient
     ){
-
     }
-    getDriversByCustomerId(data:any){
-        return this.httpClient.post(`${this.controllerPath}/getDriversByCustomerId`, data);
+
+    getTrucksByCustomerId(data:any){
+        return this.httpClient.post(`${this.controllerPath}/getTrucksByCustomerId`, data);
     }
 
     save(data:any){

@@ -12,7 +12,8 @@ export class AuthInterceptor implements HttpInterceptor {
     private environment: any;
     constructor(){
         // private _spinnerService:SpinnerService
-        this.environment = 'http://localhost:8000/api/'
+        // this.environment = 'https://inspection.solutionsitar.com/api/';
+        this.environment = 'http://localhost:8000/api/';
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

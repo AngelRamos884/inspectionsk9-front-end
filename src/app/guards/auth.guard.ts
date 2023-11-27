@@ -1,20 +1,50 @@
-import { Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 
 // import Swal from 'sweetalert2';
 import { AuthService } from '../modules/auth/services/auth.service';
 import { take, tap } from 'rxjs';
 
-export const AuthGuard = () => {
+export const LoginGuard: CanActivateFn = (route, state) => {
 
-  const authService:AuthService = Inject(AuthService);
-  const router = Inject(Router);
+  const router = inject(Router);
+  const authService = inject(AuthService);
 
   return authService.isAuthenticated$()
     .pipe(
       take(1),
-      tap((isLoggedIn: any) =>
-        !!isLoggedIn ? router.navigate(['/login']) : true
+      tap((isLoggedIn: any) => {
+        if(isLoggedIn){
+          router.navigate(['/dashboards/dashboard1'])
+          return true;
+        }else{
+          // router.navigate(['/authentication/login']);
+          return false;
+        }
+        // !!isLoggedIn ? router.navigate(['/dashboards/dashboard1']) : true
+
+      }
+      )
+    )
+
+}
+
+export const AuthGuard: CanActivateFn = (route, state) => {
+
+  const router = inject(Router);
+  const authService = inject(AuthService);
+
+  return authService.isAuthenticated$()
+    .pipe(
+      take(1),
+      tap((isLoggedIn: any) => {
+        if (isLoggedIn) {
+          return false;
+        } else {
+          router.navigate(['/authentication/login']);
+          return true;
+        }
+      }
       )
     )
 
